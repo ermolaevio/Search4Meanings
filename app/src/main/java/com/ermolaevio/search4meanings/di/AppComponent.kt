@@ -8,7 +8,11 @@ import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [])
+@Component(
+    modules = [
+        NetworkModule::class,
+    ]
+)
 interface AppComponent : AndroidInjector<App> {
 
     override fun inject(instance: App)
