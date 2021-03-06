@@ -43,11 +43,12 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     // dagger
-    implementation 'com.google.dagger:dagger:2.33'
+    implementation 'com.google.dagger:dagger-android:2.33'
+    kapt "com.google.dagger:dagger-android-processor:2.33"
     kapt 'com.google.dagger:dagger-compiler:2.33'
 
     // tests
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
