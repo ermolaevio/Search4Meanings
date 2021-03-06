@@ -8,9 +8,16 @@ import retrofit2.http.Query
 interface Api {
 
     @GET("/api/public/v1/words/search")
-    fun searchWords(@Query("ids") ids: String): Single<List<FoundWordDto>>
+    fun searchWords(
+        @Query("search") search: String,
+        /*@Query("page") page: Int?,
+        @Query("pageSize") pageSize: Int?*/
+    ): Single<List<FoundWordDto>>
 
     @GET("/api/public/v1/meanings")
-    fun getMeanings(@Query("id") id: String): Single<List<MeaningDto>>
+    fun getMeanings(
+        @Query("ids") ids: String,
+        @Query("updatedAt") updatedAt: Long?
+    ): Single<List<MeaningDto>>
 
 }
