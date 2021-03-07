@@ -19,7 +19,7 @@ class SearchWordViewModel(
     private val schedulers: Scheduler
 ) : ViewModel() {
 
-    class SearchWordViewModelFactory @Inject constructor(
+    class SearchWordViewModelFactory constructor(
         private val interactor: SearchMeaningInteractor,
         private val router: AppRouter,
         private val schedulers: Scheduler

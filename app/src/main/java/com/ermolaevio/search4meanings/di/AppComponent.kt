@@ -5,12 +5,15 @@ import com.ermolaevio.search4meanings.App
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
         NetworkModule::class,
+        FragmentBuilder::class,
+        AndroidSupportInjectionModule::class,
     ]
 )
 interface AppComponent : AndroidInjector<App> {
