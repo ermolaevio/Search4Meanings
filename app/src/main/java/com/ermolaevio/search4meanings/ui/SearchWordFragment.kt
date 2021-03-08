@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ermolaevio.search4meanings.R
 import com.ermolaevio.search4meanings.databinding.FragmentSearchWordBinding
+import com.ermolaevio.search4meanings.ui.meaning.MeaningFragment
 import com.ermolaevio.search4meanings.viewModel.SearchWordViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -51,7 +53,15 @@ class SearchWordFragment : Fragment() {
             itemAnimator = DefaultItemAnimator()
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
-        adapter = FoundWordsAdapter { viewModel.openMeaning(it) }.apply {
+        adapter = FoundWordsAdapter {
+            /*viewModel.openMeaning(it)*/
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.mainContainer, MeaningFragment())
+                .addToBackStack(null)
+                .commit()
+
+        }.apply {
             bi.foundWordsList.adapter = this
         }
 

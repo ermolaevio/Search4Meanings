@@ -6,7 +6,9 @@ class Meaning(
     val text: String,
     val translation: Translation,
     val definition: Definition,
-)
+) {
+    val prefixWithText: String = "$prefix $text"
+}
 
 class Translation(val text: String)
 
