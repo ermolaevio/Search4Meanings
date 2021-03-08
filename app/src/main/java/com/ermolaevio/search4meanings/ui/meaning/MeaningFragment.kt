@@ -46,6 +46,7 @@ class MeaningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        factory.id = arguments?.getString(MEANING_ID, "").orEmpty()
 
         viewModel = ViewModelProvider(this, factory).get(MeaningViewModel::class.java)
 

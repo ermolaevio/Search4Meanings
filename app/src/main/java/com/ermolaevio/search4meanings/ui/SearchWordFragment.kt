@@ -45,6 +45,7 @@ class SearchWordFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // TODO(Fix) точно здесь а не в onCreateView
         viewModel = ViewModelProvider(this, factory).get(SearchWordViewModel::class.java)
 
         bi.foundWordsList.layoutManager = LinearLayoutManager(context)
@@ -57,7 +58,7 @@ class SearchWordFragment : Fragment() {
             /*viewModel.openMeaning(it)*/
             parentFragmentManager
                 .beginTransaction()
-                .replace(R.id.mainContainer, MeaningFragment())
+                .replace(R.id.mainContainer, MeaningFragment.newInstance(it))
                 .addToBackStack(null)
                 .commit()
 

@@ -35,7 +35,6 @@ class SearchMeaningsModule {
         interactor: SearchMeaningInteractor
     ): MeaningViewModel.MeaningViewModelFactory {
         return MeaningViewModel.MeaningViewModelFactory(
-            "118964", // TODO(Fix)
             interactor,
             AndroidSchedulers.mainThread()
         )

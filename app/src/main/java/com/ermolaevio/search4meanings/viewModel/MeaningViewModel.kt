@@ -17,10 +17,10 @@ class MeaningViewModel(
     private val schedulers: Scheduler
 ) : ViewModel() {
 
-    class MeaningViewModelFactory constructor(
-        private val id: String,
+    class MeaningViewModelFactory(
         private val interactor: SearchMeaningInteractor,
-        private val schedulers: Scheduler
+        private val schedulers: Scheduler,
+        var id: String = ""
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
