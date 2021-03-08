@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.ermolaevio.search4meanings.R
 import com.ermolaevio.search4meanings.databinding.FragmentMeaningBinding
 import com.ermolaevio.search4meanings.viewModel.MeaningViewModel
 import dagger.android.support.AndroidSupportInjection
@@ -46,15 +48,20 @@ class MeaningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        factory.id = arguments?.getString(MEANING_ID, "").orEmpty()
+        val id = arguments?.getString(MEANING_ID, "").orEmpty()
+        check(id.isNotBlank()) { "id is null or empty!" }
+        factory.id = id
 
         viewModel = ViewModelProvider(this, factory).get(MeaningViewModel::class.java)
 
         viewModel.meaningInfo.observe(viewLifecycleOwner, Observer {
-            // TODO (Fix) add glide
+            Glide.with(this)
+                .load(it.imageUrl)
+                .error(R.drawable.ic_launcher_background)
+                .into(bi.meaningImage)
             bi.meaningText.text = it.prefixWithText
-            bi.meaningTranslation.text = it.translation.text
-            bi.meaningDefinition.text = it.definition.text
+            bi.meaningTranslation.text = it.translation
+            bi.meaningDefinition.text = it.definition
         })
     }
 }

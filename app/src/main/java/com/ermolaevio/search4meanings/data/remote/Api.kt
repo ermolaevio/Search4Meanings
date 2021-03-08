@@ -9,9 +9,7 @@ interface Api {
 
     @GET("/api/public/v1/words/search")
     fun searchWords(
-        @Query("search") search: String,
-        /*@Query("page") page: Int?,
-        @Query("pageSize") pageSize: Int?*/
+        @Query("search") search: String
     ): Single<List<FoundWordDto>>
 
     @GET("/api/public/v1/meanings")

@@ -55,7 +55,7 @@ class SearchWordFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
         }
         adapter = FoundWordsAdapter {
-            /*viewModel.openMeaning(it)*/
+            // TODO(Fix) перенести в роутер
             parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.mainContainer, MeaningFragment.newInstance(it))

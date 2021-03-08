@@ -1,6 +1,6 @@
 package com.ermolaevio.search4meanings.data.repository
 
-import com.ermolaevio.search4meanings.data.convert
+import com.ermolaevio.search4meanings.convert
 import com.ermolaevio.search4meanings.data.remote.Api
 import com.ermolaevio.search4meanings.domain.models.FoundWord
 import com.ermolaevio.search4meanings.domain.models.Meaning

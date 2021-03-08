@@ -38,7 +38,7 @@ class MeaningViewModel(
             .subscribe({
                 meaningInfo.value = it.first()
             }, {
-                // TODO(Fix) что с ошибкой делать
+                meaningInfo.value
             })
             .addTo(disposables)
     }

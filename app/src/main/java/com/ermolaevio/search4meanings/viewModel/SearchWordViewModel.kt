@@ -1,12 +1,11 @@
 package com.ermolaevio.search4meanings.viewModel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ermolaevio.search4meanings.AppRouter
 import com.ermolaevio.search4meanings.domain.interactor.SearchMeaningInteractor
-import com.ermolaevio.search4meanings.domain.models.FoundWord
+import com.ermolaevio.search4meanings.ui.models.WordAndMeaningViewItem
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -31,7 +30,7 @@ class SearchWordViewModel(
         }
     }
 
-    val result = MutableLiveData<List<FoundWord>>(emptyList())
+    val result = MutableLiveData<List<WordAndMeaningViewItem>>(emptyList())
     val loading = MutableLiveData<Boolean>(false)
     private val searchSubject = PublishSubject.create<String>()
     private val disposables = CompositeDisposable()
@@ -42,17 +41,16 @@ class SearchWordViewModel(
             .distinctUntilChanged()
             .doOnNext { loading.postValue(true) }
             .switchMapSingle { interactor.search(it) }
-                // TODO(Fix) io ?
+            .map(WordAndMeaningViewItem.Companion::create)
+            // TODO(Fix) io ?
             .subscribeOn(Schedulers.io())
             .observeOn(schedulers)
             .subscribe({
                 loading.value = false
                 result.value = it
-                Log.d("SearchWord", "next: ${it.size}")
             }, {
                 loading.value = false
                 result.value = emptyList()
-                Log.d("SearchWord", "error: $it")
             })
             .addTo(disposables)
     }
@@ -61,9 +59,9 @@ class SearchWordViewModel(
         searchSubject.onNext(text)
     }
 
-    fun openMeaning(id: String) {
+    /*fun openMeaning(id: String) {
         router.openMeaning(id)
-    }
+    }*/
 
     override fun onCleared() {
         super.onCleared()
