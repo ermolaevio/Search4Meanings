@@ -1,5 +1,6 @@
 package com.ermolaevio.search4meanings.viewModel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,9 +10,9 @@ import com.ermolaevio.search4meanings.domain.models.FoundWord
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class SearchWordViewModel(
     private val interactor: SearchMeaningInteractor,
@@ -41,13 +42,17 @@ class SearchWordViewModel(
             .distinctUntilChanged()
             .doOnNext { loading.postValue(true) }
             .switchMapSingle { interactor.search(it) }
+                // TODO(Fix) io ?
+            .subscribeOn(Schedulers.io())
             .observeOn(schedulers)
             .subscribe({
                 loading.value = false
                 result.value = it
+                Log.d("SearchWord", "next: ${it.size}")
             }, {
                 loading.value = false
                 result.value = emptyList()
+                Log.d("SearchWord", "error: $it")
             })
             .addTo(disposables)
     }

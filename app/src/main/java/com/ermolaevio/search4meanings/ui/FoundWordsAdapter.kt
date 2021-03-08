@@ -15,6 +15,7 @@ class FoundWordsAdapter(private val onClick: (String) -> Unit) :
     fun addWords(newList: List<FoundWord>) {
         list.clear()
         list.addAll(newList)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordHolder {

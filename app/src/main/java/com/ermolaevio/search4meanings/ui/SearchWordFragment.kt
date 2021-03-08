@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -33,11 +34,12 @@ class SearchWordFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentSearchWordBinding.inflate(inflater, container, false).let {
-        bi = it
-        it.root
+    ): ViewGroup {
+        bi = FragmentSearchWordBinding.inflate(inflater, container, false)
+        return bi.root
     }
 
+    // TODO(Fix) добавить сюда лоадер
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -52,6 +54,11 @@ class SearchWordFragment : Fragment() {
         adapter = FoundWordsAdapter { viewModel.openMeaning(it) }.apply {
             bi.foundWordsList.adapter = this
         }
+
+        // TODO(Fix) почему viewOwner ?
+        viewModel.result.observe(viewLifecycleOwner, Observer {
+            adapter.addWords(it)
+        })
 
         bi.searchEditText.afterTextChanged { viewModel.search(it.toString().trim()) }
     }

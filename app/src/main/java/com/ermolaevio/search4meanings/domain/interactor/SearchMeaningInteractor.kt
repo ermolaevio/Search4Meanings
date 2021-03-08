@@ -10,7 +10,10 @@ class SearchMeaningInteractor @Inject constructor(
     private val repository: SearchMeaningsRepository
 ) {
 
-    fun search(search: String): Single<List<FoundWord>> = repository.search(search)
+    fun search(search: String): Single<List<FoundWord>> {
+        // TODO(Fix) что то мне этот onErrorItem не оч =(
+        return repository.search(search).onErrorReturnItem(emptyList())
+    }
 
     fun getMeaning(ids: Array<String>): Single<List<Meaning>> = repository.getMeaningDetail(ids)
 
