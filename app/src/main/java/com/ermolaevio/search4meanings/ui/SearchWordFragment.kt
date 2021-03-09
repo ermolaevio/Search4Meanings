@@ -27,6 +27,7 @@ class SearchWordFragment : Fragment() {
     private lateinit var bi: FragmentSearchWordBinding
     private lateinit var adapter: FoundWordsAdapter
 
+    // TODO(Fix) перенести отсюда нах
     override fun onAttach(context: Context) {
         super.onAttach(context)
         AndroidSupportInjection.inject(this)
@@ -75,6 +76,10 @@ class SearchWordFragment : Fragment() {
 
         viewModel.empty.observe(viewLifecycleOwner, Observer {
             bi.emptyView.makeVisibleOrGone(it)
+        })
+
+        viewModel.loading.observe(viewLifecycleOwner, Observer {
+            bi.progress.makeVisibleOrGone(it)
         })
     }
 }

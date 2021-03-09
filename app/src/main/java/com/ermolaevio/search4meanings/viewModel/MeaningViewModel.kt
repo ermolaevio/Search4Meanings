@@ -29,6 +29,8 @@ class MeaningViewModel(
     }
 
     val meaningInfo = MutableLiveData<Meaning>()
+    val loading = MutableLiveData<Boolean>(true)
+    val empty = MutableLiveData<Boolean>(false)
     private val disposables = CompositeDisposable()
 
     init {
@@ -37,8 +39,11 @@ class MeaningViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 meaningInfo.value = it.first()
+                empty.value = false
+                loading.value = false
             }, {
-                meaningInfo.value
+                loading.value = false
+                empty.value = true
             })
             .addTo(disposables)
     }

@@ -10,7 +10,6 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
@@ -33,25 +32,25 @@ class SearchWordViewModel(
 
     val result = MutableLiveData<List<WordAndMeaningViewItem>>(emptyList())
     val loading = MutableLiveData<Boolean>(false)
-    val empty = MutableLiveData<Boolean>(true)
+    val empty = MutableLiveData<Boolean>(false)
     private val searchSubject = PublishSubject.create<String>()
     private val disposables = CompositeDisposable()
 
     init {
-        searchSubject.debounce(300, TimeUnit.MILLISECONDS)
-            .doOnNext {
+        searchSubject.debounce(500, TimeUnit.MILLISECONDS)
+            .filter {
                 if (it.isBlank()) {
                     loading.postValue(false)
                     result.postValue(emptyList())
+                    empty.postValue(false)
                 }
+                it.isNotBlank()
             }
-            .filter { it.isNotBlank() }
             .distinctUntilChanged()
             .doOnNext { loading.postValue(true) }
             .switchMapSingle { interactor.search(it) }
             .map(WordAndMeaningViewItem.Companion::create)
             // TODO(Fix) io ?
-            .subscribeOn(Schedulers.io())
             .observeOn(schedulers)
             .subscribeBy {
                 loading.value = false

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.ermolaevio.search4meanings.R
 import com.ermolaevio.search4meanings.databinding.FragmentMeaningBinding
+import com.ermolaevio.search4meanings.ui.makeVisibleOrGone
 import com.ermolaevio.search4meanings.viewModel.MeaningViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -57,11 +58,18 @@ class MeaningFragment : Fragment() {
         viewModel.meaningInfo.observe(viewLifecycleOwner, Observer {
             Glide.with(this)
                 .load(it.imageUrl)
-                .error(R.drawable.ic_launcher_background)
+                .placeholder(R.color.gray_400)
                 .into(bi.meaningImage)
             bi.meaningText.text = it.prefixWithText
             bi.meaningTranslation.text = it.translation
             bi.meaningDefinition.text = it.definition
+        })
+        viewModel.empty.observe(viewLifecycleOwner, Observer {
+            bi.emptyView.makeVisibleOrGone(it)
+        })
+
+        viewModel.loading.observe(viewLifecycleOwner, Observer {
+            bi.progress.makeVisibleOrGone(it)
         })
     }
 }

@@ -24,13 +24,13 @@
         android:fontFamily="sans-serif-medium"
         android:maxLines="2"
         android:padding="16dp"
-        tools:text="to realize"
         android:textColor="@color/black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/meaningImage" />
+        app:layout_constraintTop_toBottomOf="@id/meaningImage"
+        tools:text="to realize" />
 
     <TextView
         android:id="@+id/meaningTranslation"
@@ -40,12 +40,13 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-medium"
         android:maxLines="2"
-        tools:text="осозновать"
         android:textColor="@color/black"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/meaningText" />
+        app:layout_constraintTop_toBottomOf="@id/meaningText"
+        tools:text="осозновать" />
 
     <TextView
         android:id="@+id/meaningDefinition"
@@ -56,11 +57,30 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-medium"
         android:maxLines="2"
-        tools:text="to understand and be aware"
         android:textColor="@color/black"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/meaningTranslation" />
+        app:layout_constraintTop_toBottomOf="@id/meaningTranslation"
+        tools:text="To make real or concrete; give reality or substance to. To make real or concrete; give reality or substance to. " />
+
+    <com.ermolaevio.search4meanings.ui.EmptyView
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

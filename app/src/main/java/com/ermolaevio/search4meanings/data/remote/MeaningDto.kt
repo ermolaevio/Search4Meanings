@@ -13,7 +13,7 @@ class MeaningDto(
     val id: String,
 
     @SerializedName("prefix")
-    val prefix: String,
+    val prefix: String?,
 
     @SerializedName("text")
     val text: String,
@@ -32,7 +32,7 @@ class MeaningDto(
     override fun convert(): Meaning {
         return Meaning(
             id = id,
-            prefix = prefix,
+            prefix = prefix.orEmpty(),
             text = text,
             translation = translation.convert(),
             definition = definition.convert(),
