@@ -72,5 +72,9 @@ class SearchWordFragment : Fragment() {
         })
 
         bi.searchEditText.afterTextChanged { viewModel.search(it.toString().trim()) }
+
+        viewModel.empty.observe(viewLifecycleOwner, Observer {
+            bi.emptyView.makeVisibleOrGone(it)
+        })
     }
 }

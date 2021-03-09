@@ -9,6 +9,7 @@ import com.ermolaevio.search4meanings.ui.models.WordAndMeaningViewItem
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
@@ -32,11 +33,18 @@ class SearchWordViewModel(
 
     val result = MutableLiveData<List<WordAndMeaningViewItem>>(emptyList())
     val loading = MutableLiveData<Boolean>(false)
+    val empty = MutableLiveData<Boolean>(true)
     private val searchSubject = PublishSubject.create<String>()
     private val disposables = CompositeDisposable()
 
     init {
         searchSubject.debounce(300, TimeUnit.MILLISECONDS)
+            .doOnNext {
+                if (it.isBlank()) {
+                    loading.postValue(false)
+                    result.postValue(emptyList())
+                }
+            }
             .filter { it.isNotBlank() }
             .distinctUntilChanged()
             .doOnNext { loading.postValue(true) }
@@ -45,14 +53,16 @@ class SearchWordViewModel(
             // TODO(Fix) io ?
             .subscribeOn(Schedulers.io())
             .observeOn(schedulers)
-            .subscribe({
+            .subscribeBy {
                 loading.value = false
                 result.value = it
-            }, {
-                loading.value = false
-                result.value = emptyList()
-            })
+                empty.value = it.isEmpty()
+            }
             .addTo(disposables)
+    }
+
+    private fun setSearchResult(list: List<WordAndMeaningViewItem>) {
+
     }
 
     fun search(text: String) {

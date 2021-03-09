@@ -2,11 +2,8 @@ package com.ermolaevio.search4meanings.ui
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import androidx.annotation.LayoutRes
 
 fun EditText.addOnTextChanged(
     after: ((s: Editable) -> Unit)? = null,
@@ -40,4 +37,8 @@ fun EditText.addOnTextChanged(
 
 fun EditText.afterTextChanged(after: (s: Editable) -> Unit) {
     addOnTextChanged(after = after)
+}
+
+fun View.makeVisibleOrGone(visible: Boolean) {
+    visibility = if (visible) View.VISIBLE else View.GONE
 }

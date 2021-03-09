@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Search4Meanings</string>
+    <string name="search_hint">Поиск слов</string>
+    <string name="empty_description">Не удалось загрузить данные</string>
 </resources>
