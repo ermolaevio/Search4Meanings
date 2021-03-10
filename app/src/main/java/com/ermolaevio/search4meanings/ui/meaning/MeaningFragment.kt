@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -44,6 +45,7 @@ class MeaningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         bi = FragmentMeaningBinding.inflate(inflater, container, false)
+        (activity as? AppCompatActivity)?.setSupportActionBar(bi.toolbar)
         return bi.root
     }
 
