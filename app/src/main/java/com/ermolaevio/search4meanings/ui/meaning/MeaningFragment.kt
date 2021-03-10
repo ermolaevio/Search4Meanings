@@ -46,6 +46,7 @@ class MeaningFragment : Fragment() {
     ): View? {
         bi = FragmentMeaningBinding.inflate(inflater, container, false)
         (activity as? AppCompatActivity)?.setSupportActionBar(bi.toolbar)
+        bi.toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
         return bi.root
     }
 
