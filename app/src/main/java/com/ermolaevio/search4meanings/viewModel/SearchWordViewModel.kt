@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ermolaevio.search4meanings.AppRouter
-import com.ermolaevio.search4meanings.domain.interactor.SearchMeaningInteractor
+import com.ermolaevio.search4meanings.domain.interactor.SearchMeaningInteractorImpl
 import com.ermolaevio.search4meanings.ui.models.WordAndMeaningViewItem
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
@@ -14,13 +14,13 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 class SearchWordViewModel(
-    private val interactor: SearchMeaningInteractor,
+    private val interactor: SearchMeaningInteractorImpl,
     private val router: AppRouter,
     private val schedulers: Scheduler
 ) : ViewModel() {
 
     class SearchWordViewModelFactory constructor(
-        private val interactor: SearchMeaningInteractor,
+        private val interactor: SearchMeaningInteractorImpl,
         private val router: AppRouter,
         private val schedulers: Scheduler
     ) : ViewModelProvider.Factory {
@@ -58,10 +58,6 @@ class SearchWordViewModel(
                 empty.value = it.isEmpty()
             }
             .addTo(disposables)
-    }
-
-    private fun setSearchResult(list: List<WordAndMeaningViewItem>) {
-
     }
 
     fun search(text: String) {
