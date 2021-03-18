@@ -68,17 +68,17 @@ class SearchWordFragment : Fragment() {
         }
 
         // TODO(Fix) почему viewOwner ?
-        viewModel.result.observe(viewLifecycleOwner, Observer {
+        viewModel.resultLiveData.observe(viewLifecycleOwner, Observer {
             adapter.addWords(it)
         })
 
         bi.searchEditText.afterTextChanged { viewModel.search(it.toString().trim()) }
 
-        viewModel.empty.observe(viewLifecycleOwner, Observer {
+        viewModel.emptyLiveData.observe(viewLifecycleOwner, Observer {
             bi.emptyView.makeVisibleOrGone(it)
         })
 
-        viewModel.loading.observe(viewLifecycleOwner, Observer {
+        viewModel.loadingLiveData.observe(viewLifecycleOwner, Observer {
             bi.progress.makeVisibleOrGone(it)
         })
     }

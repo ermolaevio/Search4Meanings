@@ -1,12 +1,15 @@
 package com.ermolaevio.search4meanings.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ermolaevio.search4meanings.AppRouter
+import com.ermolaevio.search4meanings.domain.execution.ThreadScheduler
+import com.ermolaevio.search4meanings.domain.execution.scheduleIoToUi
+import com.ermolaevio.search4meanings.domain.interactor.SearchMeaningInteractor
 import com.ermolaevio.search4meanings.domain.interactor.SearchMeaningInteractorImpl
+import com.ermolaevio.search4meanings.ui.DEBOUNCE_DEFAULT
 import com.ermolaevio.search4meanings.ui.models.WordAndMeaningViewItem
-import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -14,44 +17,50 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 class SearchWordViewModel(
-    private val interactor: SearchMeaningInteractorImpl,
-    private val router: AppRouter,
-    private val schedulers: Scheduler
+    private val interactor: SearchMeaningInteractor,
+    private val scheduler: ThreadScheduler
 ) : ViewModel() {
 
-    class SearchWordViewModelFactory constructor(
+    // TODO придумать как обьединить фабрики, чтобы небыло мусора в каждой vm
+    class SearchWordViewModelFactory(
         private val interactor: SearchMeaningInteractorImpl,
-        private val router: AppRouter,
-        private val schedulers: Scheduler
+        private val scheduler: ThreadScheduler
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SearchWordViewModel(interactor, router, schedulers) as T
+            return SearchWordViewModel(interactor, scheduler) as T
         }
     }
 
-    val result = MutableLiveData<List<WordAndMeaningViewItem>>(emptyList())
+    private val result = MutableLiveData<List<WordAndMeaningViewItem>>(emptyList())
     val loading = MutableLiveData<Boolean>(false)
-    val empty = MutableLiveData<Boolean>(false)
+    private val empty = MutableLiveData<Boolean>(false)
+
+    val loadingLiveData: LiveData<Boolean> = loading
+    val emptyLiveData: LiveData<Boolean> = empty
+    val resultLiveData: LiveData<List<WordAndMeaningViewItem>> = result
+
     private val searchSubject = PublishSubject.create<String>()
     private val disposables = CompositeDisposable()
 
     init {
-        searchSubject.debounce(500, TimeUnit.MILLISECONDS)
-            .filter {
-                if (it.isBlank()) {
-                    loading.postValue(false)
-                    result.postValue(emptyList())
-                    empty.postValue(false)
-                }
-                it.isNotBlank()
-            }
+        initSearchObservable()
+    }
+
+    fun search(text: String) {
+        searchSubject.onNext(text)
+    }
+
+    private fun initSearchObservable() {
+        searchSubject
+            .debounce(DEBOUNCE_DEFAULT, TimeUnit.MILLISECONDS, scheduler.io())
+            .doOnNext(::checkIfEmpty)
+            .filter(String::isNotBlank)
             .distinctUntilChanged()
             .doOnNext { loading.postValue(true) }
             .switchMapSingle { interactor.search(it) }
             .map(WordAndMeaningViewItem.Companion::create)
-            // TODO(Fix) io ?
-            .observeOn(schedulers)
+            .scheduleIoToUi(scheduler)
             .subscribeBy {
                 loading.value = false
                 result.value = it
@@ -60,13 +69,13 @@ class SearchWordViewModel(
             .addTo(disposables)
     }
 
-    fun search(text: String) {
-        searchSubject.onNext(text)
+    private fun checkIfEmpty(it: String) {
+        if (it.isBlank()) {
+            loading.postValue(false)
+            result.postValue(emptyList())
+            empty.postValue(false)
+        }
     }
-
-    /*fun openMeaning(id: String) {
-        router.openMeaning(id)
-    }*/
 
     override fun onCleared() {
         super.onCleared()

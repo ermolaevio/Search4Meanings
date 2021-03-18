@@ -5,6 +5,8 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 
+const val DEBOUNCE_DEFAULT = 500L
+
 fun EditText.addOnTextChanged(
     after: ((s: Editable) -> Unit)? = null,
     before: ((s: CharSequence?, start: Int, count: Int, after: Int) -> Unit)? = null,

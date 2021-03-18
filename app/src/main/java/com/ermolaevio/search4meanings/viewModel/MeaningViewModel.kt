@@ -3,28 +3,27 @@ package com.ermolaevio.search4meanings.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.ermolaevio.search4meanings.domain.execution.ThreadScheduler
+import com.ermolaevio.search4meanings.domain.execution.scheduleIoToUi
 import com.ermolaevio.search4meanings.domain.interactor.SearchMeaningInteractor
 import com.ermolaevio.search4meanings.domain.models.Meaning
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 
 class MeaningViewModel(
     private val id: String,
     private val interactor: SearchMeaningInteractor,
-    private val schedulers: Scheduler
+    private val scheduler: ThreadScheduler
 ) : ViewModel() {
 
     class MeaningViewModelFactory(
         private val interactor: SearchMeaningInteractor,
-        private val schedulers: Scheduler,
+        private val scheduler: ThreadScheduler,
         var id: String = ""
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return MeaningViewModel(id, interactor, schedulers) as T
+            return MeaningViewModel(id, interactor, scheduler) as T
         }
     }
 
@@ -35,8 +34,7 @@ class MeaningViewModel(
 
     init {
         interactor.getMeaning(arrayOf(id))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .scheduleIoToUi(scheduler)
             .subscribe({
                 meaningInfo.value = it.first()
                 empty.value = false

@@ -4,7 +4,7 @@ import com.ermolaevio.search4meanings.domain.models.FoundWord
 
 class WordAndMeaningViewItem(
     val idMeaning: String,
-    val text: String,
+    val word: String,
     val meaning: String
 ) {
 
@@ -25,7 +25,11 @@ class WordAndMeaningViewItem(
         fun create(list: List<FoundWord>): List<WordAndMeaningViewItem> {
             return list.flatMap { word: FoundWord ->
                 word.meanings.map { meaning ->
-                    WordAndMeaningViewItem(meaning.id, word.text, meaning.text)
+                    WordAndMeaningViewItem(
+                        idMeaning = meaning.id,
+                        word = word.text,
+                        meaning = meaning.text
+                    )
                 }
             }
         }

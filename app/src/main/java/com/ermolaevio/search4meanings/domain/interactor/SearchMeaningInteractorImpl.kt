@@ -17,6 +17,7 @@ class SearchMeaningInteractorImpl @Inject constructor(
         }
             .onErrorReturnItem(emptyList())
 
-    fun getMeaning(ids: Array<String>): Single<List<Meaning>> = repository.getMeaningDetail(ids)
+    override fun getMeaning(ids: Array<String>): Single<List<Meaning>> =
+        repository.getMeaningDetail(ids)
 
 }

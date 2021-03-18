@@ -49,7 +49,7 @@ class FoundWordsAdapter(private val onClick: (String) -> Unit) :
 
         fun bind(word: WordAndMeaningViewItem) {
             bi.meaningText.text = word.meaning
-            bi.wordText.text = word.text
+            bi.wordText.text = word.word
         }
     }
 }
